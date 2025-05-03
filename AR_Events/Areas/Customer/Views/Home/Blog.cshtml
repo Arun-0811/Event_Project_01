@@ -1,0 +1,258 @@
+﻿@{
+    ViewData["Title"] = "Upcoming Events";
+
+}
+@model List<AR_Events.Models.EventBookModel>
+
+
+
+<div class="container blog-page py-5">
+    <h2 class="mb-4">Upcoming Events</h2>
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <img src="/images/bg-main.jpg" class="card-img-top" alt="Event Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Event_Name</h5>
+
+                        <p class="card-text text-muted mb-1">
+                            <i class="bi bi-calendar-event"></i>
+                            @item.Event_StartDate.ToString("MMMM dd") -
+                            @item.Event_EndDate.ToString("MMMM dd, yyyy")
+                        </p>
+
+                        <p class="card-text">
+                            Price: ₹@item.EventCost_PerPerson + @item.GST% GST
+                        </p>
+
+                        <!-- ✅ Corrected link to go to EventDetails controller and Details action -->
+                        <a asp-action="Details" asp-controller="EventDetails" asp-route-id="@item.Id" class="btn btn-primary w-100">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<!-- Payment Page -->
+<div class="container cnt01 py-5 " id="paymentSection">
+    <h2 class="mb-4">Event Payment Details</h2>
+    <div class="row">
+        <div class="col-lg-8">
+            <img src="/images/ChatGPT Image Apr 7, 2025, 03_18_46 PM.png" class="img-fluid mb-3" alt="Event Banner" width="50%" height="auto">
+            <div class="bg-light p-3 rounded shadow-sm">
+                <h4>Certified Scrum Professional Scrum Master (CSP-SM) Training Certification</h4>
+                <p>Friday, 25th Apr 2025 - Sunday, 27th Apr 2025 | 06:00 PM to 11:30 PM IST<br>Location: Virtual Event</p>
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-6">
+                        <p class="mb-1 fw-bold">Certified Scrum Professional Scrum Master</p>
+                        <p class="mb-0">INR <span id="price">35000</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="ticketCount" class="form-label">Select Quantity</label>
+                        <select class="form-select" id="ticketCount" onchange="calculateTotal()" >
+                            <option value="0" selected>0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Amount(INR)</th>
+                            <td id="amount">35000</td>
+                        </tr>
+                        <tr>
+                            <th>GST (18%)</th>
+                            <td id="gst">6300</td>
+                        </tr>
+                        <tr>
+                            <th>Convenience Fee</th>
+                            <td id="fee">1945.23</td>
+                        </tr>
+                        <tr class="fw-bold">
+                            <th>Total Amount(INR)</th>
+                            <td id="total">43245</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-success w-100" onclick="showSuccessPopup()">Pay Now</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Success Modal -->
+<div class="modal fade" id="paymentSuccessModal" tabindex="-1" aria-labelledby="paymentSuccessModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header border-0">
+                <h5 class="modal-title w-100" id="paymentSuccessModalLabel">Payment Successful</h5>
+            </div>
+            <div class="modal-body">
+                <p class="fs-5">🎉 Ticket Booked Successfully!<br>Enjoy your event!</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- More Events Section -->
+<div class="container py-5" id="moreEvents" style="display: none;">
+    <h3 class="mb-4">More Events From Same Organizer</h3>
+    <div class="row" id="relatedEventsContainer">
+        <!-- Related event cards will be added here dynamically -->
+    </div>
+</div>
+<script>
+    const sampleEvents = [
+      {
+        title: "KMP-2: Kanban Management Professional",
+        date: "April 26, 2025",
+        category: "Training & Workshops",
+        type: "Online",
+        image: "/images/related1.jpg"
+      },
+      {
+        title: "Advanced Certified Scrum Master (A-CSM)",
+        date: "April 11, 2025",
+        category: "Training & Workshops",
+        type: "Online",
+        image: "/images/related2.jpg"
+      },
+      {
+        title: "SBK: Scrum Better With Kanban Training",
+        date: "June 1, 2025",
+        category: "Training & Workshops",
+        type: "Online",
+        image: "/images/related3.jpg"
+      }
+    ];
+
+    function showRelatedEvents() {
+      const container = document.getElementById("relatedEventsContainer");
+      container.innerHTML = ''; // Clear old cards if any
+
+      sampleEvents.forEach(event => {
+        const card = document.createElement("div");
+        card.className = "col-md-4 mb-4";
+        card.innerHTML = `
+          <div class="card h-100 shadow-sm">
+            <img src="${event.image}" class="card-img-top" alt="${event.title}">
+            <div class="card-body">
+              <h6 class="card-title">${event.title}</h6>
+              <p class="text-muted mb-1"><i class="bi bi-calendar-event"></i> ${event.date}</p>
+              <div class="d-flex justify-content-between align-items-center small text-muted">
+                <span><i class="bi bi-grid"></i> ${event.category}</span>
+                <span><i class="bi bi-globe"></i> ${event.type}</span>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      document.getElementById("moreEvents").style.display = "block";
+    }
+</script>
+
+
+
+
+<script>
+    function showPaymentPage(button) {
+      const blogPage = document.querySelector('.blog-page');
+      const cnt01 = document.querySelector('.cnt01');
+
+      // Hide event list and show payment section
+      blogPage.style.display = 'none';
+      cnt01.style.display = 'block';
+
+      
+      // Get event details from clicked card
+      const card = button.closest('.card');
+      const title = card.querySelector('.card-title').innerText;
+      const date = card.querySelector('.card-text.text-muted').innerText;
+      const priceText = card.querySelectorAll('.card-text')[1].innerText; // Assumes 2nd card-text is the price
+      const priceMatch = priceText.match(/\d+/g);
+      const price = priceMatch ? parseInt(priceMatch[0]) : 0;
+         
+
+          // ✅ Update dynamic image
+       const imageSrc = card.querySelector('img').getAttribute('src');
+       document.querySelector('#paymentSection img').setAttribute('src', imageSrc);
+
+      // Update payment page content
+      document.querySelector('#paymentSection h4').innerText = title ;
+      document.querySelector('#paymentSection p').innerHTML =
+        `${date} | 06:00 PM to 11:30 PM IST<br>Location: Virtual Event`;
+      document.getElementById("price").innerText = price;
+      document.getElementById("amount").innerText = price;
+      document.getElementById("ticketCount").value = 1;
+
+      // Trigger total calculation
+      calculateTotal();
+      showRelatedEvents();
+    }
+
+    function calculateTotal() {
+      const count = parseInt(document.getElementById("ticketCount").value);
+      const price = parseInt(document.getElementById("price").innerText);
+      const gst = price * 0.18 * count;
+      const fee = 1945.23 * count;
+      const total = price * count + gst + fee;
+
+      document.getElementById("amount").innerText = price * count;
+      document.getElementById("gst").innerText = gst.toFixed(0);
+      document.getElementById("fee").innerText = fee.toFixed(2);
+      document.getElementById("total").innerText = total.toFixed(0);
+    }
+
+    // Optional: hide payment page initially
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelector('.cnt01').style.display = 'none';
+    });
+
+ //success msg
+      function showSuccessPopup() {
+      const quantity = parseInt(document.getElementById("ticketCount").value);
+      if (quantity === 0) {
+        alert("Please select at least 1 ticket to proceed.");
+        return;
+      }
+
+      const myModal = new bootstrap.Modal(document.getElementById('paymentSuccessModal'));
+      myModal.show();
+    }
+</script>
+
+
+
+
+
+
+@section Blog {
+    <link rel="stylesheet" href="~/css/Blog.css" asp-append-version="true" />
+}
+
+@section BlogScripts {
+    <script>
+        let footHide = document.getElementById('Foot-Hide');
+        footHide.hidden = true;
+    </script>
+}
+

@@ -1,0 +1,113 @@
+﻿@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    
+    
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-gradient bg-primary text-white text-center rounded-top-4">
+                    <h4 class="my-2">Create Your Account</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Form with asp-action and asp-controller attributes -->
+                    <form asp-action="Register" asp-controller="Login" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.Username, new { @class = "form-label fw-semibold" })
+                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control shadow-sm", placeholder = "Enter username" })
+                            @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.Email, new { @class = "form-label fw-semibold" })
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control shadow-sm", type = "email", placeholder = "Enter email" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.MobileNo, new { @class = "form-label fw-semibold" })
+                            @Html.TextBoxFor(m => m.MobileNo, new { @class = "form-control shadow-sm", placeholder = "Enter mobile number" })
+                            @Html.ValidationMessageFor(m => m.MobileNo, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.City, new { @class = "form-label fw-semibold" })
+                            @Html.TextBoxFor(m => m.City, new { @class = "form-control shadow-sm", placeholder = "Enter city" })
+                            @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.State, new { @class = "form-label fw-semibold" })
+                            @Html.TextBoxFor(m => m.State, new { @class = "form-control shadow-sm", placeholder = "Enter state" })
+                            @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.Password, new { @class = "form-label fw-semibold" })
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control shadow-sm", placeholder = "Enter password" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.PhotoPath, new { @class = "form-label fw-semibold" })
+                            @Html.TextBoxFor(m => m.PhotoPath, new { type = "file", @class = "form-control shadow-sm", accept = "image/*" })
+                            <small class="text-muted">Upload a profile picture</small>
+                            @Html.ValidationMessageFor(m => m.PhotoPath, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm">
+                                <i class="bi bi-person-plus me-1"></i> Register
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <a asp-action="Index" asp-controller="Login" class="text-decoration-none">Already have an account? Login</a>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-secondary btn-lg w-100 mt-3"><a asp-action="Index" class="text-white text-decoration-none"><i class="bi bi-arrow-left-circle me-1 "></i> Back to Login</a></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="messageModalLabel">Status</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p>@ViewBag.Message</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var message = "@ViewBag.Message";
+            if (message) {
+                var modal = new bootstrap.Modal(document.getElementById('messageModal'));
+                modal.show();
+            }
+        });
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+

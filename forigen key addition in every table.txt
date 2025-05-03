@@ -1,0 +1,18 @@
+Here are some examples of **category names** and corresponding **items** commonly found in the medical (pharmacy) field:
+
+### Category Names and Items:
+| **Category Name**      | **Example Items**                                                      |
+|-------------------------|----------------------------------------------------------------------|
+| Pain Relief            | Paracetamol Tablets, Ibuprofen Gel, Diclofenac Ointment             |
+| Antibiotics            | Amoxicillin Capsules, Azithromycin Tablets, Cefuroxime Syrup       |
+| Antacids               | Ranitidine Tablets, Pantoprazole, Liquid Antacids                  |
+| Cough and Cold         | Cough Syrup, Lozenges, Nasal Decongestant Spray                    |
+| Vitamins and Supplements | Vitamin C Tablets, Calcium with Vitamin D3, Multivitamin Capsules |
+| Diabetes Care          | Insulin Injections, Glucometer Strips, Metformin Tablets           |
+| Skin Care              | Antifungal Cream, Hydrocortisone Cream, Sunscreen                  |
+| Surgical Supplies      | Bandages, Surgical Gloves, Cotton Rolls                            |
+| Child Care             | Baby Wipes, Infant Formula, Pediatric Oral Rehydration Solution   |
+| First Aid              | Antiseptic Liquid, Plasters, Burn Cream                            |
+
+Let me know if you'd like me to help expand on any of these! I can also help brainstorm more item names or related details.
+

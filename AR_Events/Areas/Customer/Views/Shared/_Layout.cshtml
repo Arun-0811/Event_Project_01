@@ -1,0 +1,169 @@
+﻿@* Customer _Layout Page *@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | AREvents</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    @RenderSection("Index", required: false)
+    @RenderSection("AboutUs", required: false)
+    @RenderSection("Services", required: false)
+    @RenderSection("CorporateEvents", required: false)
+    @RenderSection("Blog", required: false)
+    @RenderSection("Enquiry", required: false)
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">    
+
+</head>
+<body>
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3 fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-danger" asp-area="Customer" asp-controller="Home" asp-action="Index">AREvents</a>
+            <form class="d-none d-md-block ms-3">
+                <input class="form-control d-lg-inline" type="search" placeholder="Search Events" /><a href="#"><i class="bi bi-search ms-3 "></i></a>
+            </form>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav gap-3 align-items-center">
+                    <li class="nav-item frst6"><a class="nav-link" asp-area="Customer"  asp-controller="Home" asp-action="Index" id="navehome">HOME</a></li>
+                    <li class="nav-item frst6"><a class="nav-link" asp-area="Customer"  asp-controller="Home" asp-action="AboutUs">ABOUT US</a></li>
+                    <li class="nav-item frst6"><a class="nav-link" asp-area="Customer"  asp-controller="Home" asp-action="Services">SERVICES</a></li>
+                    <li class="nav-item frst6"><a class="nav-link" asp-area="Customer"  asp-controller="Home" asp-action="CorporateEvents">CORPORATE EVENTS</a></li>
+                    <li class="nav-item frst6"><a class="nav-link" asp-area="Customer"  asp-controller="EventDetails" asp-action="Index">BLOG</a></li>
+                    <li class="nav-item frst6"><a class="nav-link" asp-area="Customer"  asp-controller="Home" asp-action="Enquiry">ENQUIRY</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" asp-action="BookedHistory" asp-controller="EventDetails" asp-area="Customer"><i class="fa-solid fa-calendar-days"></i></a>
+                    </li>
+                    <!-- User Dropdown -->
+                    @{
+                        var username = Context.Session.GetString("Username");
+                        var photoPath = Context.Session.GetString("PhotoPath") ?? "default-avatar.png";
+                        var profileUrl = Url.Content($"~/Profile/{photoPath}");
+                    }
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="@profileUrl"
+                                 alt="Profile Picture"
+                                 class="rounded-circle"
+                                 style="width: 30px; height: 30px; object-fit: cover;" />
+                            <span>@username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" asp-action="MyProfile" asp-controller="Account" asp-area="Login">My Profile</a></li>
+                            <li><a class="dropdown-item" asp-action="BookedHistory" asp-controller="EventDetails" asp-area="Customer">Booked Events</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" asp-action="Logout" asp-controller="Login" asp-area="Login">Logout</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="fw-bold">"Adorn Your Ceremony With Our Service"</h1>
+            <p class="breadcrumb-custom pt-3"><a asp-area="Customer"  asp-controller="Home" asp-action="Index" class="text-white ">HOME</a> &nbsp;&ensp;@ViewData["Title"]</p>
+        </div>
+    </section>
+
+    <main role="main">
+        @RenderBody()  <!-- This is your main content -->
+    </main>
+
+    <!-- bottom Image Banner Section -->
+    <section id="FootHide" class="footer-hero d-flex align-items-center text-center text-white">
+        
+        <div class="container">
+            <p class="mb-4 fs-5 fst-italic"><span class="display-5 fw-bold text-primary" >We are social 24/7 – Get in touch</span></p>
+            <div class="d-flex justify-content-center gap-5 ">
+                <a href="#" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+                <a href="#" class="social-icon"><i class="bi bi-google"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="text-light pt-5" style="background-color: #111;">
+        <div class="container">
+            <div class="row text-start pb-4">
+                <!-- About Us -->
+                <div class="col-md-3 mb-4">
+                    <h6 class="footer-title">ABOUT US</h6>
+                    <div class="footer-underline mb-2"></div>
+                    <p class="small">
+                        We are a dynamic software development company providing innovative and customized solutions for businesses across various industries. With a strong focus on quality, we specialize in web, mobile, and enterprise application development. Our clients range from startups to established enterprises, both locally and globally.
+                    </p>
+
+                </div>
+
+                <!-- Twitter -->
+                <div class="col-md-3 mb-4">
+                    <h6 class="footer-title">FOLLOW ME ON TWITTER</h6>
+                    <div class="footer-underline mb-2"></div>
+                    <div class="bg-white text-dark p-3 rounded" style="height: 150px; overflow-y: auto;">
+                        <strong>Posts from @@AREvents@@2025</strong>
+                        <p class="mt-2">X</p>
+                    </div>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="col-md-3 mb-4">
+                    <h6 class="footer-title">NEWSLETTER</h6>
+                    <div class="footer-underline mb-2"></div>
+                    <p class="small">Subscribe to our newsletter for latest updates about our creative agency</p>
+                    <form class="d-flex flex-column">
+                        <input type="email" class="form-control mb-2" placeholder="Email address" />
+                        <button class="btn btn-warning text-dark fw-bold">Send</button>
+                    </form>
+                </div>
+
+                <!-- Contact -->
+                <div class="col-md-3 mb-4">
+                    <h6 class="footer-title">CONTACT US</h6>
+                    <div class="footer-underline mb-2"></div>
+                    <p class="small mb-1"><i class="bi bi-geo-alt"></i> KAASHIV INFOTECH<br>3A ,1st Cross Street, PH Road, Near to Shenbaga Bhavan Hotel& Opposite to FB Cakes,<br>Maduravoyal, Chennai-600095</p>
+                    <p class="small mb-1"><i class="bi bi-telephone"></i> +91-9769730276</p>
+                    <p class="small mb-1">
+                        SOFTWARE DEVELOPMENT TEAM<br>
+                        Kaashiv Infotech: <a href="mailto:adnan@pegasusevents.in" class="text-decoration-none text-light">,kaashiv.info@gmail.com</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+    @RenderSection("BlogScripts", required: false)
+    @RenderSection("Scripts", required: false)
+    @RenderSection("AboutusScripts", required: false)
+    @RenderSection("Enquiryjs", required: false)
+    @RenderSection("EventTableScrollSpy", required: false)
+    <!-- Toast Message Section -->
+    
+
+</body>
+</html>

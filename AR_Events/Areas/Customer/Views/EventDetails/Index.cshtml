@@ -1,0 +1,132 @@
+﻿@{
+    ViewData["Title"] = "Upcoming Events";
+    
+}
+@model List<AR_Events.Models.EventBookModel>
+
+
+
+<div class="container blog-page py-5">
+    <h2 class="mb-4">Upcoming Events</h2>
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <img src="~/images/@item.ImagePath" class="card-img-top w-100 h-100 object-fit-cover" alt="Event Image" style="height: 230px;">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Event_Name</h5>
+
+                        <p class="card-text text-muted mb-1">
+                            <i class="bi bi-calendar-event"></i>
+                            @item.Event_StartDate.ToString("MMMM dd") -
+                            @item.Event_EndDate.ToString("MMMM dd, yyyy")
+                        </p>
+
+                        <p class="card-text">
+                            Price: ₹@item.EventCost_PerPerson + GST(@item.GST %)
+                        </p>
+
+                        <!-- ✅ Corrected link to go to EventDetails controller and Details action -->
+                        <a asp-action="Details" asp-controller="EventDetails" asp-route-id="@item.Id" class="btn btn-primary w-100">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<script>
+       function showPaymentPage(button) {
+         const blogPage = document.querySelector('.blog-page');
+         const cnt01 = document.querySelector('.cnt01');
+
+         // Hide event list and show payment section
+         blogPage.style.display = 'none';
+         cnt01.style.display = 'block';
+
+
+         // Get event details from clicked card
+         const card = button.closest('.card');
+         const title = card.querySelector('.card-title').innerText;
+         const date = card.querySelector('.card-text.text-muted').innerText;
+         const priceText = card.querySelectorAll('.card-text')[1].innerText; // Assumes 2nd card-text is the price
+         const priceMatch = priceText.match(/\d+/g);
+         const price = priceMatch ? parseInt(priceMatch[0]) : 0;
+
+
+             // ✅ Update dynamic image
+          const imageSrc = card.querySelector('img').getAttribute('src');
+          document.querySelector('#paymentSection img').setAttribute('src', imageSrc);
+
+         // Update payment page content
+         document.querySelector('#paymentSection h4').innerText = title ;
+         document.querySelector('#paymentSection p').innerHTML =
+           `${date} | 06:00 PM to 11:30 PM IST<br>Location: Virtual Event`;
+         document.getElementById("price").innerText = price;
+         document.getElementById("amount").innerText = price;
+         document.getElementById("ticketCount").value = 1;
+
+         // Trigger total calculation
+         calculateTotal();
+         showRelatedEvents();
+       }
+
+       function calculateTotal() {
+         const count = parseInt(document.getElementById("ticketCount").value);
+         const price = parseInt(document.getElementById("price").innerText);
+         const gst = price * 0.18 * count;
+         const fee = 1945.23 * count;
+         const total = price * count + gst + fee;
+
+         document.getElementById("amount").innerText = price * count;
+         document.getElementById("gst").innerText = gst.toFixed(0);
+         document.getElementById("fee").innerText = fee.toFixed(2);
+         document.getElementById("total").innerText = total.toFixed(0);
+       }
+
+       // Optional: hide payment page initially
+       document.addEventListener("DOMContentLoaded", () => {
+         document.querySelector('.cnt01').style.display = 'none';
+       });
+
+    //success msg
+         function showSuccessPopup() {
+         const quantity = parseInt(document.getElementById("ticketCount").value);
+         if (quantity === 0) {
+           alert("Please select at least 1 ticket to proceed.");
+           return;
+         }
+
+         const myModal = new bootstrap.Modal(document.getElementById('paymentSuccessModal'));
+         myModal.show();
+       }
+</script>
+
+
+
+
+
+
+@section Blog {
+    <link rel="stylesheet" href="~/css/Blog.css" asp-append-version="true" />
+}
+
+@section BlogScripts {
+    <script>
+        var footHide = document.getElementById('Foot-Hide');
+        footHide.hidden = true;
+    </script>
+}
+
+---------------------------------------

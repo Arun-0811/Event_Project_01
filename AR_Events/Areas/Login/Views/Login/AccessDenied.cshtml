@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="container mt-5 text-center">
+    <div class="alert alert-danger shadow p-4 rounded">
+        <h2 class="text-danger"><i class="bi bi-shield-lock-fill"></i> Access Denied</h2>
+        <p class="lead mt-3">You do not have permission to view this page.</p>
+        <a asp-area="Login" asp-controller="Login" asp-action="Index" class="btn btn-primary mt-3">
+            <i class="bi bi-box-arrow-in-left"></i> Return to Login
+        </a>
+    </div>
+</div>

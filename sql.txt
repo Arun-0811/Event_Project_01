@@ -1,0 +1,297 @@
+SELECT TOP (1000) [Event_Id]
+      ,[Event_Name]
+      ,[Event_StartDate]
+      ,[Event_EndDate]
+      ,[Event_StartTime]
+      ,[Event_EndTime]
+      ,[Event_Organizer]
+      ,[EventCost_PerPerson]
+      ,[GST]
+      ,[Conv_Fee]
+      ,[Total_Amt]
+  FROM [AREvent_Project].[dbo].[EventDetails_TableForBook]
+
+
+CREATE PROCEDURE sp_event_fetch_all
+AS
+BEGIN
+    SELECT [Event_Id],
+           [Event_Name],
+           [Event_StartDate],
+           [Event_EndDate],
+           [Event_StartTime],
+           [Event_EndTime],
+           [Event_Organizer],
+           [EventCost_PerPerson],
+           [GST],
+           [Conv_Fee],
+           [Total_Amt]
+    FROM [AREvent_Project].[dbo].[EventDetails_TableForBook];
+END;
+
+CREATE PROCEDURE sp_event_fetch_by_id
+    @Event_Id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        [Event_Id],
+        [Event_Name],
+        [Event_StartDate],
+        [Event_EndDate],
+        [Event_StartTime],
+        [Event_EndTime],
+        [Event_Organizer],
+        [EventCost_PerPerson],
+        [GST],
+        [Conv_Fee],
+        [Total_Amt]
+    FROM 
+        [AREvent_Project].[dbo].[EventDetails_TableForBook]
+    WHERE 
+        [Event_Id] = @Event_Id
+END
+
+
+CREATE PROCEDURE sp_event_fetch_cardData
+
+AS
+BEGIN
+    SELECT [Event_Id],
+           [Event_Name],
+           [Event_StartDate],
+           [Event_EndDate],           
+           [EventCost_PerPerson],
+           [GST]           
+    FROM 
+        [AREvent_Project].[dbo].[EventDetails_TableForBook];
+    
+END
+
+CREATE PROCEDURE sp_events_by_organizer
+    @Organizer NVARCHAR(100),
+    @CurrentEventId INT
+AS
+BEGIN
+    SELECT TOP 3 *
+    FROM EventDetails_TableForBook
+    WHERE Event_Organizer = @Organizer AND Event_Id <> @CurrentEventId
+END
+
+
+
+   ALTER PROCEDURE [dbo].[sp_event_create]
+    @Event_Name VARCHAR(100),
+    @Event_StartDate DATE,
+    @Event_EndDate DATE,
+    @Event_StartTime TIME,
+    @Event_EndTime TIME,
+    @Event_location VARCHAR(100),
+    @Event_Organizer VARCHAR(100),
+    @EventCost_PerPerson DECIMAL(10, 2),
+    @GST DECIMAL(10, 2),
+    @Conv_Fee DECIMAL(10, 2),
+    @Total_Amt DECIMAL(10, 2),
+	@ImagePath NVARCHAR(255)
+AS
+BEGIN
+    INSERT INTO [EventDetails_TableForBook] (
+        Event_Name, Event_StartDate, Event_EndDate,
+        Event_StartTime, Event_EndTime, Event_location,
+        Event_Organizer, EventCost_PerPerson, GST, Conv_Fee, Total_Amt,ImagePath)
+    VALUES (
+        @Event_Name, @Event_StartDate, @Event_EndDate,
+        @Event_StartTime, @Event_EndTime, @Event_location,
+        @Event_Organizer, @EventCost_PerPerson, @GST, @Conv_Fee, @Total_Amt,@ImagePath)
+END
+
+
+
+
+CREATE PROCEDURE sp_event_update_by_id
+    @Event_Id INT,
+    @Event_Name NVARCHAR(100),
+    @Event_StartDate DATE,
+    @Event_EndDate DATE,
+    @Event_StartTime TIME,
+    @Event_EndTime TIME,
+    @Event_location NVARCHAR(200),
+    @Event_Organizer NVARCHAR(100),
+    @EventCost_PerPerson DECIMAL(10, 2),
+    @GST DECIMAL(10, 2),
+    @Conv_Fee DECIMAL(10, 2),
+    @Total_Amt DECIMAL(10, 2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE [EventDetails_TableForBook]
+    SET
+        Event_Name = @Event_Name,
+        Event_StartDate = @Event_StartDate,
+        Event_EndDate = @Event_EndDate,
+        Event_StartTime = @Event_StartTime,
+        Event_EndTime = @Event_EndTime,
+        Event_location = @Event_location,
+        Event_Organizer = @Event_Organizer,
+        EventCost_PerPerson = @EventCost_PerPerson,
+        GST = @GST,
+        Conv_Fee = @Conv_Fee,
+        Total_Amt = @Total_Amt
+    WHERE
+        Event_Id = @Event_Id;
+END
+
+
+
+CREATE PROCEDURE sp_event_delete_by_id
+    @Event_Id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM [EventDetails_TableForBook]
+    WHERE Event_Id = @Event_Id;
+END
+
+
+
+CREATE TABLE Users (
+    UserId INT IDENTITY(1,1) PRIMARY KEY,
+    Username NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(150) NOT NULL UNIQUE,
+    MobileNo NVARCHAR(15) NOT NULL,
+    City NVARCHAR(100) NOT NULL,
+    State NVARCHAR(100) NOT NULL,
+    Password NVARCHAR(255) NOT NULL
+);
+
+
+
+ALTER PROCEDURE [dbo].[sp_RegisterUser]
+    @Username NVARCHAR(100),
+    @Email NVARCHAR(150),
+    @MobileNo NVARCHAR(15),
+    @City NVARCHAR(100),
+    @State NVARCHAR(100),
+    @Password NVARCHAR(55),
+	@PhotoPath NVARCHAR(255)
+AS
+BEGIN
+    INSERT INTO Users (Username, Email, MobileNo, City, State, Password, PhotoPath)
+    VALUES (@Username, @Email, @MobileNo, @City, @State, @Password, @PhotoPath);
+END
+CREATE PROCEDURE sp_LoginUser
+@Username NVARCHAR(100),
+    @Email NVARCHAR(150),
+    @Password NVARCHAR(255)
+AS
+BEGIN
+    SELECT * FROM Users
+    WHERE Username=@Username and Email = @Email AND Password = @Password;
+END
+
+
+CREATE PROCEDURE sp_get_booked_events
+    @UserId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        Event_Id,
+        Event_Name,
+        Event_StartDate,
+        Event_EndDate,
+        Event_StartTime,
+        Event_EndTime,
+        Event_location,
+        Event_Organizer,
+        EventCost_PerPerson,
+        GST,
+        Conv_Fee,
+        Total_Amt
+    FROM 
+        BookedEvents_Table
+    WHERE 
+        UserId = @UserId
+    ORDER BY 
+        Event_StartDate DESC;
+END
+
+
+
+  ALTER TABLE [AREvent_Project].[dbo].[BookedEvents]
+ADD CONSTRAINT FK_BookedEvents_UserId
+FOREIGN KEY (UserId)
+REFERENCES [AREvent_Project].[dbo].[Users](UserId);
+
+
+CREATE PROCEDURE DeleteAllBookedEvents
+AS
+BEGIN
+    DELETE FROM [AREvent_Project].[dbo].[BookedEvents];
+END;
+
+CREATE PROCEDURE DeleteBookedEventsByEventId
+    @EventId INT
+AS
+BEGIN
+    DELETE FROM [AREvent_Project].[dbo].[BookedEvents]
+    WHERE Event_Id = @EventId;
+END;
+
+
+
+
+
+
+  ALTER TABLE [dbo].[BookedEvents]
+ADD CONSTRAINT FK_BookedEvents_Users
+FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users]([UserId]);
+
+
+
+ CREATE TABLE Enquiries
+(
+    InquiryId INT IDENTITY(1,1) PRIMARY KEY,  -- Unique identifier for each inquiry
+    Name VARCHAR(100) NOT NULL,               -- Name of the person submitting the inquiry
+    Email VARCHAR(100) NOT NULL,              -- Email address of the person
+    Subject VARCHAR(200) NOT NULL,            -- Subject of the inquiry
+    Message TEXT NOT NULL,                     -- The message or content of the inquiry
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE() -- Timestamp for when the inquiry was created
+);
+
+CREATE PROCEDURE InsertEnquiry
+    @Name VARCHAR(100),
+    @Email VARCHAR(100),
+    @Subject VARCHAR(200),
+    @Message TEXT
+AS
+BEGIN
+    -- Insert the inquiry into the Inquiries table
+    INSERT INTO Enquiries (Name, Email, Subject, Message, CreatedAt)
+    VALUES (@Name, @Email, @Subject, @Message, GETDATE());
+END
+GO
+
+Alter PROCEDURE sp_event_truncate_all
+AS
+BEGIN
+    BEGIN TRY
+        -- Truncate the table to delete all rows
+        TRUNCATE TABLE dbo.EventDetails_TableForBook;
+
+        -- Reset the identity column so that the next inserted row starts at 1 (or any value you prefer)
+        DBCC CHECKIDENT ('dbo.EventDetails_TableForBook', RESEED, 1);  -- This will reset the identity to 1
+
+        PRINT 'All events have been deleted successfully and identity reset.';
+    END TRY
+    BEGIN CATCH
+        PRINT 'An error occurred during the truncate operation.';
+        -- Optional: You can log the error or rethrow it
+        THROW;
+    END CATCH
+END
+GO

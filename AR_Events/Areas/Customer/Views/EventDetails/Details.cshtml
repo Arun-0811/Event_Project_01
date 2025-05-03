@@ -1,0 +1,153 @@
+﻿@model AR_Events.Models.EventBookModel
+@{
+    ViewData["Title"] = "Payment Page";
+}
+
+<div class="container py-5" id="paymentSection">
+    <h2 class="mb-4 text-center">🎫 Confirm Your Event Booking</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <img src="/images/@Model.ImagePath" class="img-fluid mb-4 rounded" alt="@Model.Event_Name Banner">
+
+                    <h4>@Model.Event_Name</h4>
+                    <p class="text-muted">
+                        @Model.Event_StartDate.ToString("dd MMM yyyy") - @Model.Event_EndDate.ToString("dd MMM yyyy") |
+                        @{
+                            var startTime = DateTime.Today.Add(@Model.Event_StartTime);
+                            var endTime = DateTime.Today.Add(@Model.Event_EndTime);
+                        }
+                        @startTime:hh\\:mm tt - @endTime:hh\\:mm tt IST<br />
+                        <strong>Location:</strong> @Model.Event_location <br />
+                        <strong>Organizer:</strong> @Model.Event_Organizer
+                    </p>
+
+                    <hr />
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p class="fw-bold mb-1">@Model.Event_Name</p>
+                            <p>INR <span id="price">@Model.EventCost_PerPerson</span> per ticket</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ticketCount" class="form-label">Select Ticket Count</label>
+                            <select class="form-select" id="ticketCount" asp-for="TicketCount" onchange="calculateTotal()">
+                                @for (int i = 0; i <= 5; i++)
+                                {
+                                    <option value="@i" selected="@(i == 0 ? "selected" : null)">@i</option>
+                                }
+                            </select>
+
+
+                        </div>
+                    </div>
+
+                    <table class="table table-bordered mb-4">
+                        <tbody>
+                            <tr><th>Base Amount</th><td id="amount">0.00</td></tr>
+                            <tr><th>GST (@Model.GST%)</th><td id="gst">0.00</td></tr>
+                            <tr><th>Convenience Fee</th><td id="fee">0.00</td></tr>
+                            <tr class="table-info fw-bold"><th>Total Amount</th><td id="total">0.00</td></tr>
+                        </tbody>
+                    </table>
+
+                    <form asp-action="ConfirmBooking" asp-controller="EventDetails" asp-area="Customer" method="post" onsubmit="return prepareBooking()">
+                        @Html.AntiForgeryToken()
+
+                        <!-- Required Hidden Inputs -->
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        
+                        <input type="hidden" name="Event_Name" value="@Model.Event_Name" />
+                        <input type="hidden" name="Event_StartDate" value="@Model.Event_StartDate.ToString("yyyy-MM-dd")" />
+                        <input type="hidden" name="Event_EndDate" value="@Model.Event_EndDate.ToString("yyyy-MM-dd")" />
+                        <input type="hidden" name="Event_StartTime" value="@Model.Event_StartTime.ToString()" />
+                        <input type="hidden" name="Event_EndTime" value="@Model.Event_EndTime.ToString()" />
+                        <input type="hidden" name="Event_location" value="@Model.Event_location" />
+                        <input type="hidden" name="Event_Organizer" value="@Model.Event_Organizer" />
+                        <input type="hidden" name="EventCost_PerPerson" value="@Model.EventCost_PerPerson" />
+                        <input type="hidden" name="GST" value="@Model.GST" />
+                        <input type="hidden" name="Conv_Fee" value="@Model.Conv_Fee" />
+
+                        <!-- Dynamically Calculated Inputs -->
+                        <input type="hidden" name="TicketCount" id="hiddenTicketCount" />
+                        <input type="hidden" name="Total_Amt" id="hiddenTotalAmt" />
+
+                        <button type="submit" class="btn btn-success btn-lg w-100 mt-3 mb-2">💳 Pay Now</button>
+                        <button type="submit" class="btn btn-secondary btn-lg w-100 mt-3"><a asp-action="Index" class="text-white text-decoration-none"><i class="bi bi-arrow-left-circle me-1 "></i> Back to Events</a></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS Data Bridge -->
+<span id="priceRef"
+      data-price="@Model.EventCost_PerPerson"
+      data-gst="@Model.GST"
+      data-fee="@Model.Conv_Fee"
+      style="display:none;"></span>
+
+<script>
+    function calculateTotal() {
+        const count = parseInt(document.getElementById("ticketCount").value);
+        const ref = document.getElementById("priceRef");
+
+        const price = parseFloat(ref.getAttribute("data-price"));
+        const gstRate = parseFloat(ref.getAttribute("data-gst"));
+        const fee = parseFloat(ref.getAttribute("data-fee")) * count;
+
+        const baseAmount = price * count;
+        const gst = (baseAmount * gstRate) / 100;
+        const total = Math.round(baseAmount + gst + fee);
+
+        document.getElementById("amount").innerText = baseAmount.toFixed(2);
+        document.getElementById("gst").innerText = gst.toFixed(2);
+        document.getElementById("fee").innerText = fee.toFixed(2);
+        document.getElementById("total").innerText = total.toFixed(2);
+
+        document.getElementById("hiddenTotalAmt").value = total.toFixed(2);
+    }
+
+    function prepareBooking() {
+        const ticketCount = parseInt(document.getElementById("ticketCount").value);
+        if (ticketCount === 0) {
+            alert("Please select at least 1 ticket.");
+            return false;
+        }
+        document.getElementById("hiddenTicketCount").value = ticketCount;
+        return true;
+    }
+
+    window.addEventListener("DOMContentLoaded", calculateTotal);
+</script>
+
+<!-- Optional Related Events -->
+@if (ViewBag.RelatedEvents != null && ViewBag.RelatedEvents.Count > 0)
+{
+    <div class="container py-5">
+        <h3 class="mb-4">More Events by This Organizer</h3>
+        <div class="row g-4">
+            @foreach (var item in ViewBag.RelatedEvents)
+            {
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="/images/bg-main.jpg" class="card-img-top" alt="Event">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Event_Name</h5>
+                            <p class="card-text text-muted">
+                                @item.Event_StartDate:MMM dd – @item.Event_EndDate:MMM dd, yyyy
+                            </p>
+                            <p class="card-text">Price: ₹@item.EventCost_PerPerson + GST (@item.GST%)</p>
+                            <a asp-action="Details" asp-controller="EventDetails" asp-route-id="@item.Id" class="btn btn-outline-primary w-100">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

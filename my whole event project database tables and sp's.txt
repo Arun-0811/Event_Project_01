@@ -1,0 +1,1168 @@
+actualy i have sets of question you refffer the zip file and answer my questions 
+
+list of questions..!
+
+1) MODULES NAME - Mention Each nad Every Module one by one?
+2) DATABASE CONCEPTS -  Mention Each nad Every Module (2.1). DATA TYPES ( int, float, varchar, date, timestamp ...) how many? (2.2). CONSTRAINTS (primary key, foreign, not null, unique, check constraint …)
+3). ADDITIONAL (normalization, stored procedure)
+4). NO OF CONTROLS (4.1) eg - TEXT, BUTTON, LIST BOX .. (Like this mention controls name for each and every module)
+5). SPECIAL FUNCTIONS, eg - PDF, MAIL  (Like this mention this for each and every module)
+6) Try Catch Exception- Count in each module  (mention count in each module)
+
+
+
+
+
+
+//Event Project Start//
+
+SELECT TOP (1000) [UserId]
+      ,[Username]
+      ,[Email]
+      ,[MobileNo]
+      ,[City]
+      ,[State]
+      ,[Password]
+      ,[PhotoPath]
+  FROM [AREvent_Project].[dbo].[Users]
+
+SELECT TOP (1000) [Event_Id]
+      ,[Event_Name]
+      ,[Event_StartDate]
+      ,[Event_EndDate]
+      ,[Event_StartTime]
+      ,[Event_EndTime]
+      ,[Event_location]
+      ,[Event_Organizer]
+      ,[BookedDate]
+      ,[EventCost_PerPerson]
+      ,[GST]
+      ,[Conv_Fee]
+      ,[Total_Amt]
+      ,[ImagePath]
+  FROM [AREvent_Project].[dbo].[EventDetails_TableForBook]
+
+SELECT TOP (1000) [EnquiryId]
+      ,[Name]
+      ,[Email]
+      ,[Subject]
+      ,[Message]
+      ,[CreatedAt]
+  FROM [AREvent_Project].[dbo].[Enquiries]
+
+
+SELECT TOP (1000) [EnquiryId]
+      ,[cus_id]
+      ,[name]
+      ,[subject]
+      ,[Message]
+      ,[CreatedAt]
+  FROM [AREvent_Project].[dbo].[Cus_EnquiryTable]
+
+SELECT TOP (1000) [Booking_Id]
+      ,[Event_Id]
+      ,[Event_Name]
+      ,[Event_StartDate]
+      ,[Event_EndDate]
+      ,[Event_StartTime]
+      ,[Event_EndTime]
+      ,[Event_location]
+      ,[Event_Organizer]
+      ,[TicketCount]
+      ,[EventCost_PerPerson]
+      ,[GST]
+      ,[Conv_Fee]
+      ,[Total_Amt]
+      ,[BookedDate]
+  FROM [AREvent_Project].[dbo].[BookedEvents]
+
+
+ALTER PROCEDURE [dbo].[DeleteAllBookedEvents]
+
+AS
+BEGIN
+    DELETE FROM [AREvent_Project].[dbo].[BookedEvents]
+    
+END;
+
+
+ALTER PROCEDURE [dbo].[DeleteBookedEventsByEventId]
+    @EventId INT
+AS
+BEGIN
+    DELETE FROM [AREvent_Project].[dbo].[BookedEvents]
+    WHERE Event_Id = @EventId;
+END;
+
+
+ ALTER PROCEDURE [dbo].[InsertEnquiry]
+    @Name VARCHAR(100),
+    @Email VARCHAR(100),
+    @Subject VARCHAR(200),
+    @Message TEXT
+AS
+BEGIN
+    INSERT INTO Enquiries (Name, Email, Subject, Message)
+    VALUES (@Name, @Email, @Subject, @Message)
+END
+
+ALTER PROCEDURE [dbo].[sp_delete_enquiry_by_id]
+    @EnquiryId INT
+AS
+BEGIN
+    DELETE FROM Enquiries
+    WHERE EnquiryId = @EnquiryId
+END
+
+ALTER PROCEDURE [dbo].[sp_event_delete_by_id]
+    @Event_Id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM [EventDetails_TableForBook]
+    WHERE Event_Id = @Event_Id;
+END
+
+  ALTER PROCEDURE [dbo].[sp_event_create]
+    @Event_Name VARCHAR(100),
+    @Event_StartDate DATE,
+    @Event_EndDate DATE,
+    @Event_StartTime TIME,
+    @Event_EndTime TIME,
+    @Event_location VARCHAR(100),
+    @Event_Organizer VARCHAR(100),
+    @EventCost_PerPerson DECIMAL(10, 2),
+    @GST DECIMAL(10, 2),
+    @Conv_Fee DECIMAL(10, 2),
+    @Total_Amt DECIMAL(10, 2),
+	@ImagePath NVARCHAR(255)
+AS
+BEGIN
+    INSERT INTO [EventDetails_TableForBook] (
+        Event_Name, Event_StartDate, Event_EndDate,
+        Event_StartTime, Event_EndTime, Event_location,
+        Event_Organizer, EventCost_PerPerson, GST, Conv_Fee, Total_Amt,ImagePath)
+    VALUES (
+        @Event_Name, @Event_StartDate, @Event_EndDate,
+        @Event_StartTime, @Event_EndTime, @Event_location,
+        @Event_Organizer, @EventCost_PerPerson, @GST, @Conv_Fee, @Total_Amt,@ImagePath)
+END
+
+ALTER PROCEDURE [dbo].[sp_event_fetch_all]
+AS
+BEGIN
+    SELECT [Event_Id],
+           [Event_Name],
+           [Event_StartDate],
+           [Event_EndDate],
+           [Event_StartTime],
+           [Event_EndTime],
+		   [Event_location],
+           [Event_Organizer],
+           [EventCost_PerPerson],
+           [GST],
+           [Conv_Fee],
+           [Total_Amt],
+		   [ImagePath]
+    FROM [AREvent_Project].[dbo].[EventDetails_TableForBook];
+END;
+
+ALTER PROCEDURE [dbo].[sp_event_fetch_by_id]
+    @Event_Id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        Event_Id,
+        Event_Name,
+        Event_StartDate,
+        Event_EndDate,
+        Event_StartTime,
+        Event_EndTime,
+        Event_location,
+        Event_Organizer,        
+        BookedDate,
+        EventCost_PerPerson,
+        GST,
+        Conv_Fee,
+        Total_Amt,
+		ImagePath
+    FROM 
+        EventDetails_TableForBook
+    WHERE 
+        Event_Id = @Event_Id;
+END
+
+ALTER PROCEDURE [dbo].[sp_event_fetch_cardData]
+
+AS
+BEGIN
+    SELECT [Event_Id],
+           [Event_Name],
+           [Event_StartDate],
+           [Event_EndDate],           
+           [EventCost_PerPerson],
+           [GST],
+		   [ImagePath]
+    FROM 
+        [AREvent_Project].[dbo].[EventDetails_TableForBook];
+    
+END
+
+  ALTER PROCEDURE [dbo].[sp_event_truncate_all]
+AS
+BEGIN
+    BEGIN TRY
+        -- Truncate the table to delete all rows
+        TRUNCATE TABLE dbo.EventDetails_TableForBook;
+
+        -- Reset the identity column so that the next inserted row starts at 1 (or any value you prefer)
+        DBCC CHECKIDENT ('dbo.EventDetails_TableForBook', RESEED, 1);  -- This will reset the identity to 1
+
+        PRINT 'All events have been deleted successfully and identity reset.';
+    END TRY
+    BEGIN CATCH
+        PRINT 'An error occurred during the truncate operation.';
+        -- Optional: You can log the error or rethrow it
+        THROW;
+    END CATCH
+END
+
+ALTER PROCEDURE [dbo].[sp_get_all_booked_events]
+
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        [Booking_Id],
+        [Event_Id],
+        
+        [Event_Name],
+        [Event_StartDate],
+        [Event_EndDate],
+        [Event_StartTime],
+        [Event_EndTime],
+        [Event_location],
+        [Event_Organizer],
+        [TicketCount],
+        [EventCost_PerPerson],
+        [GST],
+        [Conv_Fee],
+        [Total_Amt],
+        [BookedDate]
+    FROM [AREvent_Project].[dbo].[BookedEvents]
+    
+    ORDER BY [BookedDate] DESC;
+END
+
+
+ALTER PROCEDURE [dbo].[sp_events_by_organizer]
+    @Organizer NVARCHAR(100),
+    @CurrentEventId INT
+AS
+BEGIN
+    SELECT TOP 3 *
+    FROM EventDetails_TableForBook
+    WHERE Event_Organizer = @Organizer AND Event_Id <> @CurrentEventId
+END
+
+
+
+ALTER PROCEDURE [dbo].[sp_event_update_by_id]
+    @Event_Id INT,
+    @Event_Name NVARCHAR(100),
+    @Event_StartDate DATE,
+    @Event_EndDate DATE,
+    @Event_StartTime TIME,
+    @Event_EndTime TIME,
+    @Event_location NVARCHAR(200),
+    @Event_Organizer NVARCHAR(100),
+    @EventCost_PerPerson DECIMAL(10, 2),
+    @GST DECIMAL(10, 2),
+    @Conv_Fee DECIMAL(10, 2),
+    @Total_Amt DECIMAL(10, 2),
+	 @ImagePath NVARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE [EventDetails_TableForBook]
+    SET
+        Event_Name = @Event_Name,
+        Event_StartDate = @Event_StartDate,
+        Event_EndDate = @Event_EndDate,
+        Event_StartTime = @Event_StartTime,
+        Event_EndTime = @Event_EndTime,
+        Event_location = @Event_location,
+        Event_Organizer = @Event_Organizer,
+        EventCost_PerPerson = @EventCost_PerPerson,
+        GST = @GST,
+        Conv_Fee = @Conv_Fee,
+        Total_Amt = @Total_Amt,
+		ImagePath = @ImagePath
+    WHERE
+        Event_Id = @Event_Id;
+END
+
+ALTER PROCEDURE [dbo].[sp_UpdateUserProfile]
+    @UserId INT,
+    @Username NVARCHAR(100),
+    @Email NVARCHAR(100),
+    @MobileNo NVARCHAR(15),
+    @PhotoPath NVARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Users
+    SET 
+        Username = @Username,
+        Email = @Email,
+        MobileNo = @MobileNo,
+        PhotoPath = @PhotoPath
+    WHERE UserId = @UserId;
+END
+
+ALTER PROCEDURE [dbo].[sp_RegisterUser]
+    @Username NVARCHAR(100),
+    @Email NVARCHAR(150),
+    @MobileNo NVARCHAR(15),
+    @City NVARCHAR(100),
+    @State NVARCHAR(100),
+    @Password NVARCHAR(55),
+	@PhotoPath NVARCHAR(255)
+AS
+BEGIN
+    INSERT INTO Users (Username, Email, MobileNo, City, State, Password, PhotoPath)
+    VALUES (@Username, @Email, @MobileNo, @City, @State, @Password, @PhotoPath);
+END
+
+ALTER PROCEDURE [dbo].[sp_LoginUser]
+    @Email VARCHAR(100),
+    @Password VARCHAR(100)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT TOP 1 UserId, Username, PhotoPath
+    FROM Users
+    WHERE Email = @Email AND Password = @Password;
+END
+
+ALTER PROCEDURE [dbo].[sp_insert_booked_event]
+    @Event_Id INT,
+    
+    @Event_Name VARCHAR(100),
+    @Event_StartDate DATE,
+    @Event_EndDate DATE,
+    @Event_StartTime TIME,
+    @Event_EndTime TIME,
+    @Event_location VARCHAR(100),
+    @Event_Organizer VARCHAR(100),
+    @TicketCount INT,
+    @EventCost_PerPerson DECIMAL(10, 2),
+    @GST DECIMAL(10, 2),
+    @Conv_Fee DECIMAL(10, 2),
+    @Total_Amt DECIMAL(18, 2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO BookedEvents (
+        Event_Id,
+        
+        Event_Name,
+        Event_StartDate,
+        Event_EndDate,
+        Event_StartTime,
+        Event_EndTime,
+        Event_location,
+        Event_Organizer,
+        TicketCount,
+        EventCost_PerPerson,
+        GST,
+        Conv_Fee,
+        Total_Amt,
+        BookedDate
+    )
+    VALUES (
+        @Event_Id,
+        
+        @Event_Name,
+        @Event_StartDate,
+        @Event_EndDate,
+        @Event_StartTime,
+        @Event_EndTime,
+        @Event_location,
+        @Event_Organizer,
+        @TicketCount,
+        @EventCost_PerPerson,
+        @GST,
+        @Conv_Fee,
+        @Total_Amt,
+        GETDATE()
+    );
+END
+
+ ALTER PROCEDURE [dbo].[sp_GetUserById]
+    @UserId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT UserId, Username, Email,MobileNo, PhotoPath
+    FROM Users
+    WHERE UserId = @UserId;
+END
+
+  ALTER PROCEDURE [dbo].[sp_get_all_enquiries]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        [EnquiryId],
+        [Name],
+        [Email],
+        [Subject],
+        [Message],
+        [CreatedAt]
+    FROM 
+        [AREvent_Project].[dbo].[Enquiries]
+    ORDER BY 
+        [CreatedAt] DESC; -- optional: orders by latest enquiries first
+END;
+
+
+
+
+//Event Project End//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Pharmacy Project Start//
+
+SELECT TOP (1000) [Id]
+      ,[User_Email]
+      ,[Password]
+      ,[user_name]
+      ,[phone_no]
+      ,[place]
+      ,[qualification]
+  FROM [Pharmacy_DB].[dbo].[User_Login]
+
+
+SELECT TOP (1000) [tab_id]
+      ,[tab_name]
+      ,[cat_id]
+      ,[tab_quantity]
+      ,[tab_price]
+      ,[default_date]
+      ,[tab_expiry]
+      ,[total_price]
+      ,[picture_upload]
+  FROM [Pharmacy_DB].[dbo].[tbl_tablets]
+
+SELECT TOP (1000) [syrup_id]
+      ,[syrup_name]
+      ,[cat_id]
+      ,[syrup_quantity]
+      ,[syrup_price]
+      ,[default_date]
+      ,[syrup_expiry]
+      ,[total_price]
+      ,[picture_upload]
+  FROM [Pharmacy_DB].[dbo].[tbl_syrup]
+
+SELECT TOP (1000) [sur_id]
+      ,[sur_name]
+      ,[cat_id]
+      ,[sur_quantity]
+      ,[sur_price]
+      ,[default_date]
+      ,[surgical_expiry]
+      ,[total_price]
+      ,[picture_upload]
+  FROM [Pharmacy_DB].[dbo].[tbl_surgical_items]
+
+SELECT TOP (1000) [pt_id]
+      ,[cus_name]
+      ,[pt_name]
+      ,[cat_name]
+      ,[pt_quantity]
+      ,[prescription]
+  FROM [Pharmacy_DB].[dbo].[tbl_orderlist]
+
+SELECT TOP (1000) [feeback_id]
+      ,[user_id]
+      ,[cus_name]
+      ,[cus_feedback]
+  FROM [Pharmacy_DB].[dbo].[tbl_feedback]
+
+SELECT TOP (1000) [cus_id]
+      ,[cus_name]
+      ,[cat_id]
+      ,[item_name]
+      ,[quantity]
+      ,[Purchase_date]
+      ,[cost]
+      ,[total_cost]
+      ,[product_img]
+  FROM [Pharmacy_DB].[dbo].[cus_purchase_tbl]
+
+SELECT TOP (1000) [cat_id]
+      ,[cat_name]
+  FROM [Pharmacy_DB].[dbo].[Category_Name]
+
+
+
+ALTER PROCEDURE [dbo].[GetProductsByCategory]
+    @CategoryId INT -- Now input parameter is ID, not Name
+AS
+BEGIN
+    SELECT tab_name AS ItemName
+    FROM tbl_tablets
+    WHERE cat_id = @CategoryId
+
+    UNION
+
+    SELECT syrup_name AS ItemName
+    FROM tbl_syrup
+    WHERE cat_id = @CategoryId
+
+    UNION
+
+    SELECT sur_name AS ItemName
+    FROM tbl_surgical_items
+    WHERE cat_id = @CategoryId;
+END;
+
+
+ALTER PROCEDURE [dbo].[GetProductImageByCategory]
+    @Itemname varchar(50)
+AS
+BEGIN
+    SELECT picture_upload AS ItemPic, tab_price AS PricePerQty
+    FROM tbl_tablets 
+    WHERE tab_name = @Itemname
+
+    UNION
+
+    SELECT picture_upload AS ItemPic, syrup_price AS PricePerQty
+    FROM tbl_syrup 
+    WHERE syrup_name = @Itemname
+
+    UNION
+
+    SELECT picture_upload AS ItemPic, sur_price AS PricePerQty
+    FROM tbl_surgical_items 
+    WHERE sur_name = @Itemname;
+END;
+
+
+
+  ALTER PROCEDURE [dbo].[GetCatIdByCategory]
+    @CategoryName VARCHAR(100) -- Input parameter
+AS
+BEGIN
+    -- Declare a variable to hold the category ID
+    DECLARE @cat_id INT;
+
+    -- Get the cat_id from the Category_Name table based on the CategoryName
+    SELECT @cat_id = cat_id 
+    FROM Category_Name 
+    WHERE cat_name = @CategoryName;
+
+    -- If no matching cat_id is found, handle the NULL result
+    IF @cat_id IS NULL
+    BEGIN
+        -- Optional: Return a default category ID (if applicable)
+        SET @cat_id = -1; -- Replace with a valid default category ID if available
+
+        -- OR: Throw an error to explicitly indicate the issue
+        RAISERROR('Invalid category name: %s', 16, 1, @CategoryName);
+        RETURN;
+    END;
+
+    -- Return the cat_id to the calling procedure
+    SELECT @cat_id AS cat_id;
+END;
+
+ALTER PROCEDURE [dbo].[FetchLogedInUserId]
+@user_name varchar(50)
+as begin
+
+select Id from User_Login where user_name = @user_name;
+end
+
+ALTER PROCEDURE [dbo].[DeleteTabletItem]
+    @id INT   -- Tablet item ID to identify which record to delete
+AS
+BEGIN
+    -- Delete from tbl_tablets where tab_id matches the given ID
+    DELETE FROM tbl_tablets WHERE tab_id = @id;
+END;
+
+ALTER PROCEDURE [dbo].[DeleteSyrupItem]
+    @id INT   -- Syrup item ID to identify which record to delete
+AS
+BEGIN
+    -- Delete from tbl_syrup where syrup_id matches the given ID
+    DELETE FROM tbl_syrup WHERE syrup_id = @id;
+END;
+
+ALTER PROCEDURE [dbo].[DeleteSurgicalItem]
+    @sur_id INT   -- Surgical item ID to identify which record to delete
+AS
+BEGIN
+    -- Delete from tbl_surgical_items where sur_id matches the given ID
+    DELETE FROM tbl_surgical_items WHERE sur_id = @sur_id;
+END;
+
+ALTER PROCEDURE [dbo].[sp_CustomerInsertFeedback]
+    @name NVARCHAR(100),
+    @feedback NVARCHAR(MAX)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Declare the user_id variable
+    DECLARE @user_id INT;
+
+    -- Get the user's Id from User_Login table
+    SELECT @user_id = Id 
+    FROM User_Login 
+    WHERE user_name = @name;
+
+    -- Insert the feedback
+    INSERT INTO tbl_feedback (user_id, cus_name, cus_feedback)
+    VALUES (@user_id, @name, @feedback);
+END
+
+ALTER PROCEDURE [dbo].[InsertTablet]
+    @tab_name VARCHAR(100),          -- Tablet name
+    @cat_name VARCHAR(100),          -- Category name
+    @quantity INT,                   -- Tablet quantity
+    @price DECIMAL(18, 2),           -- Tablet price
+    @mfgdate DATE,                   -- Manufacturing date
+    @expiry DATE,                    -- Expiry date
+    @pic_upload VARBINARY(MAX)       -- Image or picture upload
+AS
+BEGIN
+    -- Declare a variable to hold the category ID
+    DECLARE @cat_id INT;
+
+    -- Get the cat_id from Category_Name using the GetCatIdByCategory procedure
+    EXEC GetCatIdByCategory @CategoryName = @cat_name;
+
+    -- Retrieve the cat_id
+    SELECT @cat_id = cat_id FROM Category_Name WHERE cat_name = @cat_name;
+
+    -- Check for NULL or invalid category ID
+    IF @cat_id IS NULL OR @cat_id = -1
+    BEGIN
+        RAISERROR('Invalid category name: %s', 16, 1, @cat_name);
+        RETURN;
+    END;
+
+    -- Insert into tbl_tablets
+    INSERT INTO tbl_tablets
+    (
+        tab_name, 
+        cat_id, 
+        tab_quantity, 
+        tab_price, 
+        default_date, 
+        tab_expiry, 
+        picture_upload
+    )
+    VALUES 
+    (
+        @tab_name, 
+        @cat_id, 
+        @quantity, 
+        @price, 
+        @mfgdate, 
+        @expiry, 
+        @pic_upload
+    );
+END;
+
+ALTER PROCEDURE [dbo].[InsertSyrup]
+    @name VARCHAR(100),          -- Syrup name
+    @cat_name VARCHAR(100),      -- Category name
+    @quantity INT,               -- Syrup quantity
+    @price DECIMAL(18, 2),       -- Syrup price
+    @mfgdate DATE,               -- Manufacturing date
+    @expiry DATE,                -- Expiry date
+    @pic_upload VARBINARY(MAX)   -- Image or picture upload
+AS
+BEGIN
+    DECLARE @cat_id INT;
+
+    -- Get the cat_id from Category_Name using the GetCatIdByCategory procedure
+    EXEC GetCatIdByCategory @CategoryName = @cat_name;
+
+    -- Retrieve the cat_id to handle NULL cases
+    SELECT @cat_id = cat_id FROM Category_Name WHERE cat_name = @cat_name;
+
+    -- Validate that @cat_id is not NULL
+    IF @cat_id IS NULL
+    BEGIN
+        -- Handle the error: you can either raise an error or use a default category ID
+        RAISERROR('Invalid category name: %s', 16, 1, @cat_name);
+        RETURN;
+    END;
+
+    -- Insert into tbl_syrup
+    INSERT INTO tbl_syrup
+    (
+        syrup_name, 
+        cat_id, 
+        syrup_quantity, 
+        syrup_price, 
+        default_date, 
+        syrup_expiry, 
+        picture_upload
+    )
+    VALUES 
+    (
+        @name, 
+        @cat_id, 
+        @quantity, 
+        @price, 
+        @mfgdate, 
+        @expiry, 
+        @pic_upload
+    );
+END;
+
+ALTER PROCEDURE [dbo].[InsertSurgicalItem]
+    @name VARCHAR(100),           -- Surgical item name
+    @cat_name VARCHAR(100),       -- Category name
+    @quantity INT,                -- Surgical item quantity
+    @price DECIMAL(18, 2),        -- Surgical item price
+    @mfgdate DATE,                -- Manufacturing date
+    @expiry DATE,                 -- Expiry date
+    @pic_upload VARBINARY(MAX)    -- Image or picture upload
+AS
+BEGIN
+    DECLARE @cat_id INT;
+
+    -- Get the cat_id from Category_Name using the GetCatIdByCategory procedure
+    EXEC GetCatIdByCategory @CategoryName = @cat_name;
+
+    -- Retrieve the cat_id to handle NULL cases
+    SELECT @cat_id = cat_id FROM Category_Name WHERE cat_name = @cat_name;
+
+    -- Validate that @cat_id is not NULL
+    IF @cat_id IS NULL
+    BEGIN
+        -- Handle the error: you can either raise an error or use a default category ID
+        RAISERROR('Invalid category name: %s', 16, 1, @cat_name);
+        RETURN;
+    END;
+
+    -- Insert into tbl_surgical_items
+    INSERT INTO tbl_surgical_items
+    (
+        sur_name, 
+        cat_id, 
+        sur_quantity, 
+        sur_price, 
+        default_date, 
+        surgical_expiry, 
+        picture_upload
+    )
+    VALUES 
+    (
+        @name, 
+        @cat_id, 
+        @quantity, 
+        @price, 
+        @mfgdate, 
+        @expiry, 
+        @pic_upload
+    );
+END;
+
+ALTER PROCEDURE [dbo].[InsertCustermerPurchase]
+    @cus_name VARCHAR(100),          -- Customer name
+    @cat_name VARCHAR(100),          -- Category name
+    @item_name VARCHAR(100),         -- Item name
+    @quantity INT,                   -- Item quantity
+    @pic_upload VARBINARY(MAX),      -- Image or picture upload
+    @cost DECIMAL(18, 2),            -- Unit cost
+    @total_cost DECIMAL(18, 2)       -- Total cost
+AS
+BEGIN
+    DECLARE @cat_id INT;
+
+    -- Get the cat_id from Category_Name using the GetCatIdByCategory procedure
+    EXEC GetCatIdByCategory @CategoryName = @cat_name;
+
+    -- Retrieve the cat_id from the Category_Name table
+    SELECT @cat_id = cat_id 
+    FROM Category_Name 
+    WHERE cat_name = @cat_name;
+
+    -- Check if the category ID is NULL
+    IF @cat_id IS NULL
+    BEGIN
+        RAISERROR('Invalid category name: %s', 16, 1, @cat_name);
+        RETURN;
+    END;
+
+    -- Insert into cus_purchase_tbl
+    INSERT INTO cus_purchase_tbl
+    (
+        cus_name, 
+        cat_id, 
+        item_name, 
+        quantity, 
+        cost, 
+        total_cost, 
+        product_img
+    )
+    VALUES 
+    (
+        @cus_name, 
+        @cat_id, 
+        @item_name, 
+        @quantity, 
+        @cost, 
+        @total_cost, 
+        @pic_upload
+    );
+END;
+
+  ALTER PROCEDURE [dbo].[GetPurchaseInvoiceByCusId]
+  @Id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT TOP (1) 
+        cus_id, 
+        cus_name, 
+        cat_id, 
+        item_name, 
+        quantity, 
+        Purchase_date, 
+        cost, 
+        total_cost, 
+        product_img 
+    FROM cus_purchase_tbl
+    WHERE cus_id = @Id;
+END
+
+ALTER PROCEDURE [dbo].[sp_UpdateSurgicalItem]
+    @id INT,                      -- Surgical item ID to be updated
+    @name VARCHAR(100),           -- Updated surgical item name
+    @cat_name VARCHAR(100),       -- Updated category name
+    @quantity INT,                -- Updated surgical item quantity
+    @price DECIMAL(18, 2),        -- Updated surgical item price
+    @mfgdate DATE,                -- Updated manufacturing date
+    @expiry DATE,                 -- Updated expiry date
+    @pic_upload VARBINARY(MAX)    -- Updated image or picture upload
+AS
+BEGIN
+    DECLARE @cat_id INT;
+
+    -- Get the cat_id from Category_Name using the GetCatIdByCategory procedure
+    EXEC GetCatIdByCategory @CategoryName = @cat_name;
+
+    -- Retrieve the cat_id to ensure it is not NULL
+    SELECT @cat_id = cat_id FROM Category_Name WHERE cat_name = @cat_name;
+
+    -- Validate that @cat_id is not NULL
+    IF @cat_id IS NULL
+    BEGIN
+        -- Raise an error or handle the scenario where the category is invalid
+        RAISERROR('Invalid category name: %s', 16, 1, @cat_name);
+        RETURN;
+    END;
+
+    -- Update the tbl_surgical_items table with the new values
+    UPDATE tbl_surgical_items
+    SET
+        sur_name = @name,
+        cat_id = @cat_id, 
+        sur_quantity = @quantity,
+        sur_price = @price,
+        default_date = @mfgdate,
+        surgical_expiry = @expiry,
+        picture_upload = @pic_upload
+    WHERE sur_id = @id;  -- Update only the record that matches the given sur_id
+END;
+
+  ALTER   PROCEDURE [dbo].[sp_UpdateCustomerPurchasedItems]
+    @cus_id INT,                 -- Customer purchase record ID
+    @cus_name VARCHAR(100),       -- Customer name
+    @cat_name VARCHAR(100),       -- Category name
+    @item_name VARCHAR(100),      -- Item name
+    @quantity INT,                -- Quantity purchased
+    @cost DECIMAL(18,2),          -- Unit cost
+    @total_cost DECIMAL(18,2),    -- Total cost (quantity × unit price)
+    @pic_upload VARBINARY(MAX)    -- Image upload
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @cat_id INT;
+
+    -- Fetch cat_id based on category name
+    EXEC GetCatIdByCategory @CategoryName = @cat_name;
+
+    SELECT @cat_id = cat_id 
+    FROM Category_Name 
+    WHERE cat_name = @cat_name;
+
+    -- If no category found, raise an error
+    IF @cat_id IS NULL
+    BEGIN
+        RAISERROR('Invalid category name: %s', 16, 1, @cat_name);
+        RETURN;
+    END
+
+    -- Update the customer purchase table
+    UPDATE cus_purchase_tbl
+    SET 
+        cus_name = @cus_name,
+        cat_id = @cat_id,
+        item_name = @item_name,
+        quantity = @quantity,
+        cost = @cost,
+        total_cost = @total_cost,
+        product_img = @pic_upload
+    WHERE cus_id = @cus_id; -- Update by Customer ID
+END
+
+ALTER PROCEDURE [dbo].[sp_MergeCategoryItems]
+AS
+BEGIN
+    SELECT 
+        s.sur_id AS Surgical_ID,
+        s.sur_name AS Surgical_Name,
+        s.cat_id AS Category_ID,
+        s.sur_quantity AS Surgical_Quantity,
+        s.sur_price AS Surgical_Price,
+        s.default_date AS Surgical_Default_Date,
+        s.surgical_expiry AS Surgical_Expiry,
+        s.total_price AS Surgical_Total_Price,
+        s.picture_upload AS Surgical_Image,
+
+        t.tab_id AS Tablet_ID,
+        t.tab_name AS Tablet_Name,
+        t.tab_quantity AS Tablet_Quantity,
+        t.tab_price AS Tablet_Price,
+        t.default_date AS Tablet_Default_Date,
+        t.tab_expiry AS Tablet_Expiry,
+        t.total_price AS Tablet_Total_Price,
+        t.picture_upload AS Tablet_Image,
+
+        sy.syrup_id AS Syrup_ID,
+        sy.syrup_name AS Syrup_Name,
+        sy.syrup_quantity AS Syrup_Quantity,
+        sy.syrup_price AS Syrup_Price,
+        sy.default_date AS Syrup_Default_Date,
+        sy.syrup_expiry AS Syrup_Expiry,
+        sy.total_price AS Syrup_Total_Price,
+        sy.picture_upload AS Syrup_Image
+    FROM 
+        [Pharmacy_DB].[dbo].[tbl_surgical_items] s
+    FULL OUTER JOIN 
+        [Pharmacy_DB].[dbo].[tbl_tablets] t
+        ON s.cat_id = t.cat_id
+    FULL OUTER JOIN 
+        [Pharmacy_DB].[dbo].[tbl_syrup] sy
+        ON s.cat_id = sy.cat_id;
+END;
+
+
+ALTER procedure [dbo].[sp_login]
+  (
+  @email varchar(50),
+  @pwd varchar(50)
+  )as begin
+  select count(*) from User_Login where  User_Email = @email and Password = @pwd
+  end
+
+  ALTER PROCEDURE [dbo].[sp_insert_feedback]
+    @user_id INT,
+    @cus_feedback NVARCHAR(MAX)
+AS
+BEGIN
+    DECLARE @cus_name NVARCHAR(100);
+
+    -- First get the user_name from User_Login table
+    SELECT @cus_name = user_name
+    FROM User_Login
+    WHERE Id = @user_id;
+
+    -- Then insert into tbl_feedback
+    INSERT INTO tbl_feedback (user_id, cus_name, cus_feedback)
+    VALUES (@user_id, @cus_name, @cus_feedback);
+END;
+
+ALTER PROCEDURE [dbo].[sp_DeleteCustomerPurchase]
+@cus_id INT
+AS
+BEGIN
+    DELETE FROM cus_purchase_tbl
+    WHERE cus_id = @cus_id;
+END
+
+ALTER PROCEDURE [dbo].[sp_CustomerInsertOrderList]
+    @cus_name NVARCHAR(100),
+    @name NVARCHAR(100),
+    @cat_name NVARCHAR(100),
+    @quanty INT,
+    @pic_upload VARBINARY(MAX) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO tbl_orderlist (cus_name, pt_name, cat_name, pt_quantity, prescription)
+    VALUES (@cus_name, @name, @cat_name, @quanty, @pic_upload);
+END
+
+
+ALTER PROCEDURE [dbo].[UpdateInventory]
+    @ItemName NVARCHAR(100),
+    @Quantity INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Update tablets quantity
+    IF EXISTS (SELECT 1 FROM tbl_tablets WHERE tab_name = @ItemName)
+    BEGIN
+        UPDATE tbl_tablets
+        SET tab_quantity = tab_quantity - @Quantity
+        WHERE tab_name = @ItemName;
+        RETURN;
+    END
+
+    -- Update syrup quantity
+    IF EXISTS (SELECT 1 FROM tbl_syrup WHERE syrup_name = @ItemName)
+    BEGIN
+        UPDATE tbl_syrup
+        SET syrup_quantity = syrup_quantity - @Quantity
+        WHERE syrup_name = @ItemName;
+        RETURN;
+    END
+
+    -- Update surgical items quantity
+    IF EXISTS (SELECT 1 FROM tbl_surgical_items WHERE sur_name = @ItemName)
+    BEGIN
+        UPDATE tbl_surgical_items
+        SET sur_quantity = sur_quantity - @Quantity
+        WHERE sur_name = @ItemName;
+        RETURN;
+    END
+END
+
+ALTER PROCEDURE [dbo].[sp_UpdateTablet]
+    @id INT,                      -- Tablet ID to be updated
+    @name VARCHAR(100),           -- Updated tablet name
+    @cat_name VARCHAR(100),       -- Updated category name
+    @quantity INT,                -- Updated tablet quantity
+    @price DECIMAL(18, 2),        -- Updated tablet price
+    @mfgdate DATE,                -- Updated manufacturing date
+    @expiry DATE,                 -- Updated expiry date
+    @pic_upload VARBINARY(MAX)    -- Updated image or picture upload
+AS
+BEGIN
+    DECLARE @cat_id INT;
+
+    -- Get the cat_id from Category_Name using the GetCatIdByCategory procedure
+    EXEC GetCatIdByCategory @CategoryName = @cat_name;
+
+    -- Retrieve the cat_id and handle cases where it is NULL
+    SELECT @cat_id = cat_id FROM Category_Name WHERE cat_name = @cat_name;
+
+    -- Validate that @cat_id is not NULL
+    IF @cat_id IS NULL
+    BEGIN
+        -- Handle the error: you can either raise an error or use a default category ID
+        RAISERROR('Invalid category name: %s', 16, 1, @cat_name);
+        RETURN;
+    END;
+
+    -- Update the tbl_tablets table with the new values
+    UPDATE tbl_tablets
+    SET
+        tab_name = @name,
+        cat_id = @cat_id, 
+        tab_quantity = @quantity,
+        tab_price = @price,
+        default_date = @mfgdate,
+        tab_expiry = @expiry,
+        picture_upload = @pic_upload
+    WHERE tab_id = @id;  -- Update only the record that matches the given tab_id
+END;
+
+
+ALTER PROCEDURE [dbo].[sp_UpdateSyrup]
+    @id INT,                      -- Syrup ID to be updated
+    @name VARCHAR(100),           -- Updated syrup name
+    @cat_name VARCHAR(100),       -- Updated category name
+    @quantity INT,                -- Updated syrup quantity
+    @price DECIMAL(18, 2),        -- Updated syrup price
+    @mfgdate DATE,                -- Updated manufacturing date
+    @expiry DATE,                 -- Updated expiry date
+    @pic_upload VARBINARY(MAX)    -- Updated image or picture upload
+AS
+BEGIN
+    DECLARE @cat_id INT;
+
+    -- Get the cat_id from Category_Name using the GetCatIdByCategory procedure
+    EXEC GetCatIdByCategory @CategoryName = @cat_name;
+
+    -- Retrieve the cat_id to ensure it is not NULL
+    SELECT @cat_id = cat_id FROM Category_Name WHERE cat_name = @cat_name;
+
+    -- Validate that @cat_id is not NULL
+    IF @cat_id IS NULL
+    BEGIN
+        -- Handle the error by raising an error or aborting the operation
+        RAISERROR('Invalid category name: %s', 16, 1, @cat_name);
+        RETURN;
+    END;
+
+    -- Update the tbl_syrup table with the new values
+    UPDATE tbl_syrup
+    SET
+        syrup_name = @name,
+        cat_id = @cat_id, 
+        syrup_quantity = @quantity,
+        syrup_price = @price,
+        default_date = @mfgdate,
+        syrup_expiry = @expiry,
+        picture_upload = @pic_upload
+    WHERE syrup_id = @id;  -- Update only the record that matches the given syrup_id
+END;
+
+

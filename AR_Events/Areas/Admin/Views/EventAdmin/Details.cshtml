@@ -1,0 +1,124 @@
+﻿@model AR_Events.Models.EventBookModel
+
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-5">
+                    <h2 class="text-center text-primary mb-4">
+                        <i class="bi bi-calendar-event-fill me-2"></i>Event Details
+                    </h2>
+
+                    <hr class="mb-4" />
+                    <div class="row mb-3 disabled">
+                        <div class="col-sm-4 fw-bold text-secondary">Event Id</div>
+                        <div class="col-sm-8">@Model.Id</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold text-secondary">Event Name</div>
+                        <div class="col-sm-8">@Model.Event_Name</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold text-secondary">Date</div>
+                        <div class="col-sm-8">
+                            <span class="badge bg-info text-dark">
+                                @Model.Event_StartDate.ToString("dd MMM yyyy")
+                            </span>
+                            to
+                            <span class="badge bg-info text-dark">
+                                @Model.Event_EndDate.ToString("dd MMM yyyy")
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold text-secondary">Date & Time</div>
+                        <div class="col-sm-8">
+                            <span class="badge bg-info text-dark">
+                                @Model.Event_StartDate.ToString("dd MMM yyyy")
+                            </span>
+                            at
+                            <span class="badge bg-warning text-dark">
+                                @(DateTime.Today.Add(Model.Event_StartTime).ToString("hh:mm tt"))
+                            </span>
+                            to
+                            <span class="badge bg-info text-dark">
+                                @Model.Event_EndDate.ToString("dd MMM yyyy")
+                            </span>
+                            at
+                            <span class="badge bg-warning text-dark">
+                                @(DateTime.Today.Add(Model.Event_EndTime).ToString("hh:mm tt"))
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold text-secondary">Location</div>
+                        <div class="col-sm-8">@Model.Event_location</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold text-secondary">Organizer</div>
+                        <div class="col-sm-8">@Model.Event_Organizer</div>
+                    </div>       
+                                      
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold text-secondary">Event Image</div>
+                        <div class="col-sm-8">
+                            @if (!string.IsNullOrEmpty(Model.ImagePath))
+                            {
+                                <img src="~/images/@Model.ImagePath" alt="Event Image" class="img-fluid rounded border" style="max-height: 200px;" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No image available</span>
+                            }
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <h5 class="text-primary mb-3"><i class="bi bi-cash-coin me-1"></i>Pricing Details</h5>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-bold text-secondary">Per Person</div>
+                        <div class="col-sm-8">₹@Model.EventCost_PerPerson.ToString("F2")</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-bold text-secondary">GST</div>
+                        <div class="col-sm-8">₹@Model.GST.ToString("F2")</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-bold text-secondary">Convenience Fee</div>
+                        <div class="col-sm-8">₹@Model.Conv_Fee.ToString("F2")</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold text-secondary">Total Amount</div>
+                        <div class="col-sm-8 text-success fw-bold fs-5">
+                            ₹@Model.Total_Amt.ToString("F2")
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5">
+                        <a asp-action="Index" class="btn btn-outline-primary px-4">
+                            <i class="bi bi-arrow-left-circle me-1"></i> Back to Events
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

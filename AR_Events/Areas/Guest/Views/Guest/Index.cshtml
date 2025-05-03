@@ -1,0 +1,216 @@
+﻿@model EnquiryViewModel
+@{
+    ViewData["Title"] = "Guest Home";
+}
+
+<!-- Hero Section -->
+<section class="text-center py-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3 text-danger">Welcome to AREvents</h1>
+        <p class="lead mb-4">
+            Your one-stop solution for organizing memorable corporate, social, and private events!
+        </p>
+        <a href="#services" class="btn btn-primary btn-lg">Explore Our Services</a>
+    </div>
+</section>
+
+<!-- Services or About Section Preview -->
+<section id="services" class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5 text-dark">Our Services</h2>
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <i class="fas fa-birthday-cake fa-3x text-primary mb-3"></i>
+                <h5>Weddings & Celebrations</h5>
+                <p>We craft beautiful moments for your special days with flawless planning.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <i class="fas fa-briefcase fa-3x text-primary mb-3"></i>
+                <h5>Corporate Events</h5>
+                <p>Professional event management for conferences, seminars, and more.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <i class="fas fa-music fa-3x text-primary mb-3"></i>
+                <h5>Private Parties</h5>
+                <p>Exclusive arrangements to make your parties unforgettable and vibrant.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Us Section -->
+<section id="about" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">About Us</h2>
+        <p class="lead text-center">
+            At AREvents, we specialize in organizing all kinds of events. From corporate conferences to personal celebrations, we deliver unparalleled service. Our team of experts ensures every detail is meticulously planned, giving you peace of mind while you enjoy your event.
+        </p>
+    </div>
+</section>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<section class="contact-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 icon-box">
+                <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Envelope Icon" />
+            </div>
+            <div class="col-md-6">
+                <div class="contact-form shadow">
+                    <h3 class="text-center">Get in touch</h3>
+
+
+                    <form asp-action="SubmitEnquiry" asp-controller="Guest"  method="post">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="mb-3">
+                            <input asp-for="Name" class="form-control" placeholder="Enter your name" />
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <input asp-for="Subject" class="form-control" placeholder="Enter subject" />
+                            <span asp-validation-for="Subject" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-4">
+                            <textarea asp-for="Message" class="form-control" placeholder="Enter your message"></textarea>
+                            <span asp-validation-for="Message" class="text-danger small"></span>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-custom">Send Enquiry</button>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Enquiry {
+    <link rel="stylesheet" href="~/css/Enquiry.css" asp-append-version="true" />
+}
+
+<script>
+    $(document).ready(function () {
+        // Initialize jQuery Validation for the form
+        $("#enquiryForm").validate({
+            rules: {
+                // Define validation rules for each field
+                Name: {
+                    required: true,
+                    minlength: 3
+                },
+                Email: {
+                    required: true,
+                    email: true
+                },
+                Subject: {
+                    required: true,
+                    minlength: 5
+                },
+                Message: {
+                    required: true,
+                    minlength: 10
+                }
+            },
+            messages: {
+                // Custom error messages for each field
+                Name: {
+                    required: "Please enter your name.",
+                    minlength: "Your name must be at least 3 characters long."
+                },
+                Email: {
+                    required: "Please enter your email address.",
+                    email: "Please enter a valid email address."
+                },
+                Subject: {
+                    required: "Please enter a subject.",
+                    minlength: "Your subject must be at least 5 characters long."
+                },
+                Message: {
+                    required: "Please enter your message.",
+                    minlength: "Your message must be at least 10 characters long."
+                }
+            },
+            // Optionally, you can specify how to handle invalid submissions:
+            submitHandler: function (form) {
+                // Allow form submission to proceed if validation passes
+                form.submit();
+            }
+        });
+    });
+</script>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<!-- Testimonials Section -->
+<section id="testimonials" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 text-dark">What Our Clients Say</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="testimonial-card text-center">
+                    <p class="testimonial-text">"AREvents made our wedding unforgettable! Every detail was perfectly executed, and we couldn’t have asked for better service."</p>
+                    <p class="client-name"><strong>Jane & John</strong></p>
+                    <p class="client-role">Happy Couple</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card text-center">
+                    <p class="testimonial-text">"The corporate seminar we hosted was seamless. Their team ensured everything was top-notch from start to finish!"</p>
+                    <p class="client-name"><strong>Sarah L.</strong></p>
+                    <p class="client-role">Corporate Client</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card text-center">
+                    <p class="testimonial-text">"Our private party was a blast! From the decorations to the entertainment, everything was amazing!"</p>
+                    <p class="client-name"><strong>Emily R.</strong></p>
+                    <p class="client-role">Event Host</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Info Section -->
+<section id="contact" class="py-5 bg-dark text-white">
+    <div class="container">
+        <h2 class="text-center mb-4">Contact Information</h2>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <h5>Our Office</h5>
+                <p>KaaShiv InfoTech, 3A ,1st Cross Street, PH Road, <br />Near to Shenbaga Bhavan Hotel& Opposite to FB Cakes, <br /> Maduravoyal, Chennai-600095</p>
+            </div>
+            <div class="col-md-6 mb-3">
+                <h5>Email Us</h5>
+                <p><a href="mailto:contact@arevents.com" class="text-white">contact@arevents.com</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer Section -->
+<section id="footer" class="py-4 bg-dark text-white text-center">
+    <p>&copy; 2025 AREvents. All rights reserved.</p>
+    <p>
+        Follow Us on:
+        <a href="#" class="text-white ms-3"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="text-white ms-3"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="text-white ms-3"><i class="bi bi-linkedin"></i></a>
+    </p>
+</section>

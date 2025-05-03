@@ -1,0 +1,92 @@
+/* navbar starts */
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+}
+
+.hero {
+    background: linear-gradient(to right, #10af97, #131db0);
+    color: white;
+    padding: 120px 0 40px;
+    text-align: center;
+}
+
+.breadcrumb-custom {
+    color: #fff;
+    opacity: 0.9;
+    font-size: 1rem;
+}
+
+
+.navbar .form-control {
+    width: 300px;
+}
+
+nav .frst6 .nav-link:hover,
+nav .frst6 .nav-link.active {
+    transform: scale(1.15);
+    transition: all 0.1s ease-in-out;
+    font-size: 1rem;
+    background-color: white;
+    font-family: 'Times New Roman', Times, serif;
+    border-bottom: solid 2px #050505;
+}
+
+nav .navbar-brand:hover {
+    transform: scale(1.15);
+    transition: all 0.1s ease-in-out;
+    background-color: #f9f9f9;
+    font-size: 20px;
+}
+
+
+
+.navbar .fa-cart-shopping {
+    position: relative;
+}
+
+.navbar .cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    border-radius: 50%;
+    padding: 2px 6px;
+}
+
+.footer-title {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+
+.footer-underline {
+    width: 20px;
+    height: 3px;
+    background-color: orange;
+}
+
+.footer-hero {
+    height: 300px;
+    display: flex;
+    font-size: 30px;
+    background-image: url('/images/footer_bg.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.9;
+}
+
+
+    .footer-hero a:hover {
+        color: rgb(225, 236, 13);
+    }
+
+#navehome.active {
+    position:relative;
+}
+#FootHide{
+    visibility:initial;
+}

@@ -1,0 +1,117 @@
+﻿@model LoginModel
+@{
+    ViewData["Title"] = "User Login";
+}
+
+@{
+    var message = TempData["Message"] as string;
+}
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @message
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header text-white text-center py-4" style="background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);">
+                    <h3><i class="bi bi-person-circle me-2"></i>User Login</h3>
+                </div>
+
+                <div class="card-body px-5 py-4">
+                    <form asp-area="Login" asp-action="Login" asp-controller="Login" method="post" autocomplete="off">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="Email" class="form-label fw-semibold"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-envelope-fill"></i></span>
+                                <input asp-for="Email" class="form-control" placeholder="Enter your email" autocomplete="off" id="Email" />
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Password" class="form-label fw-semibold"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-lock-fill"></i></span>
+                                <input asp-for="Password" class="form-control" placeholder="Enter your password" autocomplete="new-password" id="Password" />
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label"></label>
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                            </button>
+                        </div>
+
+                        <div class="text-center">
+                            <a asp-action="ForgotPassword" asp-controller="Login" class="text-decoration-none me-2">Forgot Password?</a> |
+                            <a asp-action="Register" asp-controller="Login" class="text-decoration-none ms-2">Register</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true" data-message="@TempData["Message"]">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="messageModalLabel">Status</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p>@TempData["Message"]</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var modalElement = document.getElementById('messageModal');
+            var message = modalElement.getAttribute("data-message");
+
+            if (message && message.trim() !== "") {
+                // Insert the message text dynamically
+                modalElement.querySelector(".modal-body p").innerText = message;
+
+                // Show the modal
+                var modal = new bootstrap.Modal(modalElement);
+                modal.show();
+            }
+        });
+
+            window.onload = function () {
+            document.getElementById("Email").value = "";
+            document.getElementById("Password").value = "";
+        };
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+

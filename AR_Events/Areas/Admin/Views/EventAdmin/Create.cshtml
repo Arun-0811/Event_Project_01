@@ -1,0 +1,122 @@
+﻿@model AR_Events.Models.EventBookModel
+
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>Create New Event</h4>
+                </div>
+                <div class="card-body">
+
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+                        <div class="mb-3">
+                            <label asp-for="Event_Name" class="form-label">Event Name</label>
+                            <input asp-for="Event_Name" class="form-control" placeholder="Enter event name" />
+                            <span asp-validation-for="Event_Name" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="Event_StartDate" class="form-label">Start Date</label>
+                                <input asp-for="Event_StartDate" class="form-control" type="date" />
+                                <span asp-validation-for="Event_StartDate" class="text-danger small"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="Event_EndDate" class="form-label">End Date</label>
+                                <input asp-for="Event_EndDate" class="form-control" type="date" />
+                                <span asp-validation-for="Event_EndDate" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="Event_StartTime" class="form-label">Start Time</label>
+                                <input asp-for="Event_StartTime" class="form-control" type="time" />
+                                <span asp-validation-for="Event_StartTime" class="text-danger small"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="Event_EndTime" class="form-label">End Time</label>
+                                <input asp-for="Event_EndTime" class="form-control" type="time" />
+                                <span asp-validation-for="Event_EndTime" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Event_location" class="form-label">Event Location</label>
+                            <input asp-for="Event_location" class="form-control" placeholder="Enter location" />
+                            <span asp-validation-for="Event_location" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Event_Organizer" class="form-label">Event Organizer</label>
+                            <input asp-for="Event_Organizer" class="form-control" placeholder="Enter organizer name" />
+                            <span asp-validation-for="Event_Organizer" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Event Image</label>
+                            <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                            <small class="text-muted">Upload an image for the event (optional)</small>
+                        </div>
+
+
+                        <hr class="my-4" />
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="EventCost_PerPerson" class="form-label">Cost per Person (₹)</label>
+                                <input asp-for="EventCost_PerPerson" class="form-control" />
+                                <span asp-validation-for="EventCost_PerPerson" class="text-danger small"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="GST" class="form-label">GST (%)</label>
+                                <input asp-for="GST" class="form-control" />
+                                <p>Ticket Price Below Rs. 100 , GST is 12%, Above Rs. 100, GST is 18 % as per Central Government Norms <a href="https://www.taxmann.com/post/blog/gst-on-entertainment-services?msockid=369b4d4707906cb20f4f58ea06596d06" target="_blank">Learn More</a> </p>
+                                <span asp-validation-for="GST" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="Conv_Fee" class="form-label">Convenience Fee (₹)</label>
+                                <input asp-for="Conv_Fee" class="form-control" />
+                                <p>Convenience Fee (approx. 10%) as per Central Government Norms <a href="https://www.paisawapas.com/blog/save-money-on-bookmyshow-tickets/?utm_source=chatgpt.com" target="_parent">Learn More</a></p>
+                                <span asp-validation-for="Conv_Fee" class="text-danger small"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="Total_Amt" class="form-label">Total Amount (₹)</label>
+                                <input asp-for="Total_Amt" class="form-control" />
+                                <span asp-validation-for="Total_Amt" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-save me-2"></i>Save Event
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="mt-4 text-center">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left-circle me-1"></i>Back to Event List
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

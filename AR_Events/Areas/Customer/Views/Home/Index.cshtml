@@ -1,0 +1,248 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@if (TempData["Message"] != null)
+{
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div class="toast align-items-center text-white bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    @TempData["Message"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setTimeout(function () {
+            var toastEl = document.querySelector('.toast');
+            var toast = new bootstrap.Toast(toastEl);
+            toast.hide();
+        }, 5000);
+    </script>
+}
+
+
+
+<!-- Event Cards Section -->
+<section class="why-us py-5">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-4">WHY US.</h2>
+        <div class="row justify-content-center">
+
+            <!-- Card 1 -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="why-box">
+                    <div class="why-icon">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+                    <h5 class="fw-bold mt-3">EXPERIENCE AND EXPERTISE</h5>
+                    <div class="orange-line mb-2"></div>
+                    <p class="text-muted">
+                        We have been <span class="highlight">event organizers since 2005</span> and have worked extensively with companies from different industries.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="why-box">
+                    <div class="why-icon">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <h5 class="fw-bold mt-3">VENDOR NETWORK</h5>
+                    <div class="orange-line mb-2"></div>
+                    <p class="text-muted">
+                        We have a vast event vendor network who we work with to plan events for our clients in India, Middle East and South East Asia.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="why-box">
+                    <div class="why-icon">
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                    </div>
+                    <h5 class="fw-bold mt-3">COST EFFECTIVE</h5>
+                    <div class="orange-line mb-2"></div>
+                    <p class="text-muted">
+                        Our event services are cost effective and impact-full, we work with you to plan your events in sync with budgets assigned.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="why-box">
+                    <div class="why-icon">
+                        <i class="fa-solid fa-user-secret"></i>
+                    </div>
+                    <h5 class="fw-bold mt-3">TRANSPARENT</h5>
+                    <div class="orange-line mb-2"></div>
+                    <p class="text-muted">
+                        We assure complete transparency and implement it at every step of the event planning process.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Our Services included -->
+
+<section class="services py-5">
+    <div class="container">
+        <h2 class="fw-bold text-uppercase text-primary text-center mb-5">Our Services Include</h2>
+        <div class="row g-4">
+
+            <!-- Service 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card">
+                    <img src="~/images/event-manag-1.jpg" class="img-fluid rounded" alt="Event Management">
+                    <h4 class="fw-bold mt-3 text-center">EVENT MANAGEMENT SERVICES</h4>
+                    <p class="text-muted p-3">
+                        We manage complete end to end event production for our clients, for virtual and physical events. All requirements for Design, Coding, Landing Page Creation and Database management for Virtual Events along with Fabrication, AV Rentals, Sound and Light Equipments for on site events is provided by us.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card">
+                    <img src="~/images/event-manag-2.jpg" class="img-fluid rounded" alt="Event Planning">
+                    <h4 class="fw-bold mt-3 text-center">EVENT PLANNING SERVICES</h4>
+                    <p class="text-muted p-3">
+                        We help you plan your event by building an effective roadmap that helps detail out the step by step process involved from initial idea to final execution.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card">
+                    <img src="~/images/event-manag-3.jpg" class="img-fluid rounded" alt="Brand Activation">
+                    <h4 class="fw-bold mt-3 text-center">BRAND ACTIVATION SERVICES</h4>
+                    <p class="text-muted p-3">
+                        We help your brand get noticed, through unique and creative installations and campaigns that prospective customers can engage with. We also build out the user journeys, highlight channels to be used and integrate different touchpoints to create a strong brand presence.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- events carrousel -->
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title p-3 text-primary">Our Past Work</h2>
+
+        <div id="pastWorkCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <!-- Slide 1 -->
+                <div class="carousel-item active" data-bs-interval="3000">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="~/images/event-4.jpg" class="d-block w-100 rounded" alt="Event 1">
+                        </div>
+                        <div class="col-md-4">
+                            <img src="~/images/event-1.jpg" class="d-block w-100 rounded" alt="Event 2">
+                        </div>
+                        <div class="col-md-4">
+                            <img src="~/images/event-3.jpg" class="d-block w-100 rounded" alt="Event 3">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="carousel-item" data-bs-interval="3000">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="~/images/event-1.jpg" class="d-block w-100 rounded" alt="Event 4">
+                        </div>
+                        <div class="col-md-4">
+                            <img src="~/images/event-3.jpg" class="d-block w-100 rounded" alt="Event 5">
+                        </div>
+                        <div class="col-md-4">
+                            <img src="~/images/event-4.jpg" class="d-block w-100 rounded" alt="Event 6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#pastWorkCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#pastWorkCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- past worked Companies -->
+
+
+
+
+<section class="py-5 bg-white">
+    <div class="container">
+        <h2 class="section-title p-3 text-primary">Our Clients Include</h2>
+
+        <div class="row text-center justify-content-center g-4">
+            <!-- Logos -->
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/fila-logo.jpeg" alt="Client 1" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/mango-logo.webp" alt="Client 2" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/pepsi-logo.jpeg" alt="Client 3" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/adidas-logo-.jpg" alt="Client 4" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/Google-Logo.png" alt="Client 5" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/coca-cola-logo-.jpg" alt="Client 6" class="img-fluid client-logo">
+            </div>
+
+            <!-- Second Row -->
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/walmart-transparent-logo-.webp" alt="Client 7" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/deloitee-logo.jpeg" alt="Client 8" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/microsoft-logo.jpeg" alt="Client 9" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/Mercedes-Benz-Logo.png" alt="Client 10" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/umilever-logo.jpeg" alt="Client 11" class="img-fluid client-logo">
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <img src="~/images/mango-logo.webp" alt="Client 12" class="img-fluid client-logo">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+@section Index {
+    <link rel="stylesheet" href="~/css/Index.css" asp-append-version="true" />
+}
+
+
