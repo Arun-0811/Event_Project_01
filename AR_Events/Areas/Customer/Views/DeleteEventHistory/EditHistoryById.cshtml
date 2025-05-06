@@ -1,0 +1,146 @@
+﻿@model AR_Events.Models.BookedEventModel
+
+@{
+    ViewData["Title"] = "Edit Booking";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-warning text-white text-center">
+                    <h4>Edit Booking</h4>
+                </div>
+                <div class="card-body">
+
+                    <form asp-action="EditHistoryById"
+                          asp-controller="DeleteEventHistory"
+                          asp-area="Customer" asp-route-id="@Model.Booking_Id" method="post">
+                        <input type="hidden" asp-for="Booking_Id" />
+                        <input type="hidden" asp-for="Event_Id" />
+
+                        <div class="mb-3">
+                            <label asp-for="Event_Name" class="form-label">Event Name</label>
+                            <input asp-for="Event_Name" class="form-control" readonly />
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="Event_StartDate" class="form-label">Start Date</label>
+                                <input asp-for="Event_StartDate" class="form-control" type="date" readonly />
+                            </div>
+                            <div class="col">
+                                <label asp-for="Event_EndDate" class="form-label">End Date</label>
+                                <input asp-for="Event_EndDate" class="form-control" type="date" readonly />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="Event_StartTime" class="form-label">Start Time</label>
+                                <input asp-for="Event_StartTime" class="form-control" type="time" readonly />
+                            </div>
+                            <div class="col">
+                                <label asp-for="Event_EndTime" class="form-label">End Time</label>
+                                <input asp-for="Event_EndTime" class="form-control" type="time" readonly />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Event_location" class="form-label">Location</label>
+                            <input asp-for="Event_location" class="form-control" readonly />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Event_Organizer" class="form-label">Organizer</label>
+                            <input asp-for="Event_Organizer" class="form-control" readonly />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="TicketCount" class="form-label">Ticket Count</label>
+                            <input asp-for="TicketCount" class="form-control" id="TicketCount" />
+                            <span asp-validation-for="TicketCount" class="text-danger small"></span>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="EventCost_PerPerson" class="form-label">Cost per Person (₹)</label>
+                                <input asp-for="EventCost_PerPerson" class="form-control" id="CostPerPerson" readonly />
+                                <span asp-validation-for="EventCost_PerPerson" class="text-danger small"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="GST" class="form-label">GST (₹)</label>
+                                <input asp-for="GST" class="form-control" id="GST" readonly />
+                                <span asp-validation-for="GST" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="Conv_Fee" class="form-label">Convenience Fee (₹)</label>
+                                <input asp-for="Conv_Fee" class="form-control" id="ConvFee" readonly />
+                                <span asp-validation-for="Conv_Fee" class="text-danger small"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="Total_Amt" class="form-label">Total Amount (₹)</label>
+                                <input asp-for="Total_Amt" class="form-control" id="TotalAmt" readonly />
+                                <span asp-validation-for="Total_Amt" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="BookedDate" class="form-label">Booked Date</label>
+                            <input asp-for="BookedDate" class="form-control" type="date" readonly />
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <i class="bi bi-pencil-square me-2"></i>Update Booking
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="mt-4 text-center">
+                        <a asp-action="BookedHistory" asp-controller="EventDetails" asp-area="Customer" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left-circle me-1"></i>Back to Booking List
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ticketInput = document.getElementById("TicketCount");
+            const costInput = document.getElementById("CostPerPerson");
+            const gstInput = document.getElementById("GST");
+            const convFeeInput = document.getElementById("ConvFee");
+            const totalInput = document.getElementById("TotalAmt");
+
+            const costPerPerson = parseFloat('@Model.EventCost_PerPerson') || 0;
+            const convFee = parseFloat('@Model.Conv_Fee') || 50;
+            const gstRate = 0.18;
+
+            function recalculate() {
+                const ticketCount = parseInt(ticketInput.value) || 0;
+                const subtotal = ticketCount * costPerPerson;
+                const gst = subtotal * gstRate;
+                const total = subtotal + gst + convFee;
+
+                gstInput.value = gst.toFixed(2);
+                convFeeInput.value = convFee.toFixed(2);
+                totalInput.value = total.toFixed(2);
+            }
+
+            ticketInput.addEventListener("input", recalculate);
+            recalculate();
+        });
+    </script>
+}

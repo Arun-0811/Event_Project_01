@@ -267,7 +267,7 @@ namespace AR_Events.Areas.Customer.Controllers
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Logged-in user's ID
 
-            List<EventBookModel> bookedEvents = new List<EventBookModel>();
+            List<BookedEventModel> bookedEvents = new List<BookedEventModel>();
             string connectionString = _configuration.GetConnectionString("DevEventConnection");
 
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -280,10 +280,10 @@ namespace AR_Events.Areas.Customer.Controllers
                 {
                     while (reader.Read())
                     {
-                        bookedEvents.Add(new EventBookModel
+                        bookedEvents.Add(new BookedEventModel
                         {
-                            Id = reader["Event_Id"] != DBNull.Value ? Convert.ToInt32(reader["Event_Id"]) : 0,
-                            
+                            Booking_Id = reader["Booking_Id"] != DBNull.Value ? Convert.ToInt32(reader["Booking_Id"]) : 0,
+                            Event_Id = reader["Event_Id"] != DBNull.Value ? Convert.ToInt32(reader["Event_Id"]) : 0,
                             Event_Name = reader["Event_Name"]?.ToString(),
                             Event_StartDate = reader["Event_StartDate"] != DBNull.Value ? Convert.ToDateTime(reader["Event_StartDate"]) : DateTime.MinValue,
                             Event_EndDate = reader["Event_EndDate"] != DBNull.Value ? Convert.ToDateTime(reader["Event_EndDate"]) : DateTime.MinValue,
